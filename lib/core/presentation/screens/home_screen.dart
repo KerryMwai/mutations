@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:mutation/core/domain/user_repository.dart';
+import 'package:mutation/core/data/repository/user_repository.dart';
 import 'package:mutation/core/model/user.dart';
 import 'package:mutation/core/presentation/screens/all_users.dart';
 
@@ -123,9 +123,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(onPressed: ()async {
-                await UserInteraction().createUser(User(name: name.text, username: username.text, email: email.text, phone: phone.text)).then((value){
-                  print(value); 
-                } );
+                await UserInteraction().createAUser(User(name: name.text, username: username.text, email: email.text, phone: phone.text));
               }, child: const Text("Add User"))
             ],
           )

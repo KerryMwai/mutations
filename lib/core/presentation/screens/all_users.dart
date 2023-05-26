@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mutation/core/domain/user_repository.dart';
+import 'package:mutation/core/data/repository/user_repository.dart';
 import 'package:provider/provider.dart';
 
 class Allusers extends StatefulWidget {
