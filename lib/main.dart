@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:mutation/core/domain/user_repository.dart';
+import 'package:mutation/core/data/repository/user_repository.dart';
 import 'package:mutation/core/presentation/screens/home_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'core/styles/colors.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -29,15 +31,11 @@ class RootApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // final HttpLink _link = HttpLink("https://graphqlzero.almansi.me/api");
-
-    // ValueNotifier<GraphQLClient> _client = ValueNotifier(GraphQLClient(
-    //     link: _link as Link, cache: GraphQLCache(store: HiveStore())));
 
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: grey,
         ),
         debugShowCheckedModeBanner: false,
         home: const HomePage());

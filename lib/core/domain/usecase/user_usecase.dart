@@ -1,64 +1,11 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mutation/core/model/user.dart';
 
-class UserInteraction extends ChangeNotifier {
-  String userCreationmutation = """
-mutation createUser(\$input: CreateUserInput!){
-  createUser(input:\$input){
-  id
-  username
-  name
-  email
-  phone
-}
-}
-""";
+import '../entity/user_entity.dart';
 
-  String getUserQuery = """
-query (\$id: Int){
-    getUserInfo(id: \$id) {
-      id,
-      name,
-      username,
-      email
-    }
-  }
-
-""";
-
-  String getAllUsersQuery = """
-query{
-  users{
-    data{
-      id
-      name
-      username
-      email
-    	phone
-    }
-  }
-}
-""";
+class UsersUseCase {
   HttpLink link = HttpLink("https://graphqlzero.almansi.me/api");
-
-  Future<bool> createUser(User user) async {
-    GraphQLClient client =
-        GraphQLClient(link: link, cache: GraphQLCache(store: HiveStore()));
-
-    QueryResult queryResult = await client.mutate(MutationOptions(
-        fetchPolicy: FetchPolicy.networkOnly,
-        document: gql(userCreationmutation),
-        variables: {'input': user}));
-
-    if (queryResult.hasException) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   Future<Map<String, dynamic>> getUser({int? id}) async {
     GraphQLClient qlClient = GraphQLClient(
@@ -85,11 +32,22 @@ query{
         {}; // i am getting json respone in getUserInfo which i am returning
   }
 
-  List _users = [];
+  Future<bool> createUser(User user) async {
+    GraphQLClient client =
+        GraphQLClient(link: link, cache: GraphQLCache(store: HiveStore()));
 
-  UnmodifiableListView get allusers => UnmodifiableListView(_users);
+    QueryResult queryResult = await client.mutate(MutationOptions(
+        fetchPolicy: FetchPolicy.networkOnly,
+        document: gql(userCreationmutation),
+        variables: {'input': user}));
+    if (queryResult.hasException) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
-  Future getAllUsers() async {
+   getAllUsers() async {
     // this is api call for getting all users
     GraphQLClient qlClient = GraphQLClient(
       // same client create
@@ -108,10 +66,10 @@ query{
       ),
     );
 
-    _users = (queryResult.data!['users']['data'] as List)
+    var users= (queryResult.data!['users']['data'] as List)
         .map((user) => User.fromJson(user))
         .toList();
-    print(_users.length);
-    notifyListeners();
+
+    return users;
   }
 }
